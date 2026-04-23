@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Auditoría Meta Ads — EZ Play (@ezplaylatam)</title>
+  <style>
+    :root {
+      --verde: #22c55e;
+      --verde-oscuro: #16a34a;
+      --rojo: #ef4444;
+      --amarillo: #f59e0b;
+      --azul: #3b82f6;
+      --gris-bg: #f8fafc;
+      --gris-card: #ffffff;
+      --gris-borde: #e2e8f0;
+      --texto: #1e293b;
+      --texto-suave: #64748b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--gris-bg);
+      color: var(--texto);
+      line-height: 1.6;
+    }
+
+    /* HEADER */
+    .header {
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      color: white;
+      padding: 48px 40px 40px;
+      border-bottom: 4px solid var(--verde);
+    }
+    .header-meta { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .header-badge {
+      background: var(--verde);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+    }
+    .header-fecha { font-size: 13px; color: #94a3b8; }
+    .header h1 { font-size: 32px; font-weight: 800; margin-bottom: 6px; }
+    .header h1 span { color: var(--verde); }
+    .header-sub { font-size: 16px; color: #94a3b8; }
+
+    /* SCORE GLOBAL */
+    .score-banner {
+      background: white;
+      border-bottom: 1px solid var(--gris-borde);
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      gap: 48px;
+      flex-wrap: wrap;
+    }
+    .score-main { text-align: center; }
+    .score-circle {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: conic-gradient(var(--amarillo) 0% 58%, var(--gris-borde) 58% 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; font-weight: 800; color: var(--texto);
+      margin: 0 auto 8px;
+      position: relative;
+    }
+    .score-circle::before {
+      content: '';
+      position: absolute;
+      width: 76px; height: 76px;
+      border-radius: 50%;
+      background: white;
+    }
+    .score-circle span { position: relative; z-index: 1; }
+    .score-label { font-size: 13px; font-weight: 600; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.5px; }
+    .score-items { display: flex; gap: 24px; flex-wrap: wrap; }
+    .score-item { text-align: center; }
+    .score-item .num { font-size: 28px; font-weight: 800; }
+    .score-item .num.rojo { color: var(--rojo); }
+    .score-item .num.amarillo { color: var(--amarillo); }
+    .score-item .num.verde { color: var(--verde); }
+    .score-item .lbl { font-size: 12px; color: var(--texto-suave); text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* RESUMEN EJECUTIVO */
+    .resumen {
+      background: #fefce8;
+      border: 1px solid #fde68a;
+      border-left: 5px solid var(--amarillo);
+      padding: 24px 32px;
+      margin: 32px 40px;
+      border-radius: 8px;
+    }
+    .resumen h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #92400e; margin-bottom: 12px; }
+    .resumen p { font-size: 15px; color: #78350f; }
+
+    /* MAIN LAYOUT */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 40px 60px; }
+
+    /* SECCIONES */
+    .section { margin-bottom: 40px; }
+    .section-title {
+      font-size: 20px; font-weight: 800;
+      border-left: 4px solid var(--verde);
+      padding-left: 14px;
+      margin-bottom: 20px;
+      color: var(--texto);
+    }
+    .section-title span { font-size: 14px; font-weight: 500; color: var(--texto-suave); margin-left: 8px; }
+
+    /* CARDS */
+    .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+    .card {
+      background: var(--gris-card);
+      border: 1px solid var(--gris-borde);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+    }
+    .card.critico { border-left: 4px solid var(--rojo); }
+    .card.mejora { border-left: 4px solid var(--amarillo); }
+    .card.ok { border-left: 4px solid var(--verde); }
+    .card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+    .card-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+    .card h4 { font-size: 15px; font-weight: 700; }
+    .card .tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+    .tag-critico { background: #fee2e2; color: #b91c1c; }
+    .tag-mejora { background: #fef3c7; color: #92400e; }
+    .tag-ok { background: #dcfce7; color: #166534; }
+    .card p { font-size: 14px; color: var(--texto-suave); margin-bottom: 12px; }
+    .card .fix {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13px;
+      color: #166534;
+    }
+    .card .fix strong { display: block; margin-bottom: 4px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    /* TABLA COMPARATIVA AD ↔ LANDING */
+    .tabla-compare { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--gris-borde); }
+    .tabla-compare thead { background: #1e293b; color: white; }
+    .tabla-compare th { padding: 14px 18px; text-align: left; font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .tabla-compare td { padding: 14px 18px; border-bottom: 1px solid var(--gris-borde); font-size: 14px; vertical-align: top; }
+    .tabla-compare tr:last-child td { border-bottom: none; }
+    .tabla-compare tr:nth-child(even) td { background: #f8fafc; }
+    .badge-mal { background: #fee2e2; color: #b91c1c; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+    .badge-ok { background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+    .badge-medio { background: #fef3c7; color: #92400e; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+
+    /* ACCIONES PRIORITARIAS */
+    .acciones { counter-reset: accion; }
+    .accion {
+      background: white;
+      border: 1px solid var(--gris-borde);
+      border-radius: 12px;
+      padding: 22px 24px;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 20px;
+      align-items: flex-start;
+    }
+    .accion-num {
+      counter-increment: accion;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--verde);
+      color: white;
+      font-weight: 800;
+      font-size: 16px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .accion-num::after { content: counter(accion); }
+    .accion-body { flex: 1; }
+    .accion-body h4 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+    .accion-body p { font-size: 14px; color: var(--texto-suave); margin-bottom: 8px; }
+    .accion-cta {
+      display: inline-block;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 6px;
+    }
+    .impacto { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+    .impacto span {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .imp-alto { background: #fee2e2; color: #b91c1c; }
+    .imp-medio { background: #fef3c7; color: #92400e; }
+    .imp-bajo { background: #dbeafe; color: #1d4ed8; }
+
+    /* COPY SUGERIDO */
+    .copy-box {
+      background: #f8fafc;
+      border: 1px solid var(--gris-borde);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+    .copy-box .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--texto-suave); margin-bottom: 8px; }
+    .copy-antes { background: #fef2f2; border: 1px solid #fecaca; border-radius: 6px; padding: 12px; margin-bottom: 10px; font-size: 14px; color: #991b1b; }
+    .copy-despues { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 6px; padding: 12px; font-size: 14px; color: #166534; }
+    .arrow { text-align: center; font-size: 20px; margin: 6px 0; color: var(--texto-suave); }
+
+    /* PIXEL / TRACKING */
+    .tracking-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; }
+    .tracking-item { background: white; border: 1px solid var(--gris-borde); border-radius: 10px; padding: 16px; text-align: center; }
+    .tracking-item .icon { font-size: 28px; margin-bottom: 8px; }
+    .tracking-item .name { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+    .tracking-item .status { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 20px; display: inline-block; }
+    .status-no { background: #fee2e2; color: #b91c1c; }
+    .status-si { background: #dcfce7; color: #166534; }
+    .status-parcial { background: #fef3c7; color: #92400e; }
+
+    /* FOOTER */
+    .footer {
+      background: #1e293b;
+      color: #94a3b8;
+      text-align: center;
+      padding: 28px;
+      font-size: 13px;
+      margin-top: 40px;
+    }
+    .footer strong { color: white; }
+
+    @media (max-width: 640px) {
+      .header, .container { padding-left: 20px; padding-right: 20px; }
+      .resumen { margin-left: 20px; margin-right: 20px; }
+      .score-banner { padding: 24px 20px; gap: 24px; }
+      .score-items { gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-meta">
+    <span class="header-badge">Auditoría Meta Ads</span>
+    <span class="header-fecha">22 de abril de 2026</span>
+  </div>
+  <h1>EZ Play <span>@ezplaylatam</span></h1>
+  <div class="header-sub">Análisis de anuncios de Facebook/Instagram · Landing page (perfil IG) · Coherencia publicitaria · Recomendaciones</div>
+</div>
+
+<!-- SCORE GLOBAL -->
+<div class="score-banner">
+  <div class="score-main">
+    <div class="score-circle"><span>5.8</span></div>
+    <div class="score-label">Score global / 10</div>
+  </div>
+  <div class="score-items">
+    <div class="score-item"><div class="num rojo">4</div><div class="lbl">Críticos</div></div>
+    <div class="score-item"><div class="num amarillo">6</div><div class="lbl">Mejoras</div></div>
+    <div class="score-item"><div class="num verde">3</div><div class="lbl">OK</div></div>
+    <div class="score-item"><div class="num" style="color:#3b82f6">5</div><div class="lbl">Acciones</div></div>
+  </div>
+  <div style="flex:1; max-width:380px;">
+    <p style="font-size:14px; color:var(--texto-suave);">Tiene una propuesta de valor clara y diferenciada, pero <strong>la estrategia de mandar tráfico al perfil de Instagram</strong> (en lugar de a un landing page o App Store) frena las conversiones. El tracking es prácticamente inexistente y el copy de los anuncios no cierra el ciclo con un CTA que lleve a la descarga de la app.</p>
+  </div>
+</div>
+
+<!-- RESUMEN EJECUTIVO -->
+<div class="resumen">
+  <h3>⚡ Resumen ejecutivo</h3>
+  <p>EZ Play organiza partidos de fútbol y voleibol en Panamá — propuesta sólida, mercado con demanda real. El problema: los anuncios mandan tráfico al perfil de Instagram, que no tiene ni Pixel, ni botón de descarga prominente, ni forma clara de medir conversiones. Estás pagando por clics que no puedes trackear y que van a una "landing page" que no controlas. Con 5 cambios concretos puedes duplicar la tasa de conversión de tus campañas.</p>
+</div>
+
+<div class="container">
+
+  <!-- ===================== SECCIÓN 1: LANDING PAGE ===================== -->
+  <div class="section">
+    <div class="section-title">1. Landing Page (Perfil de Instagram) <span>— El cuello de botella principal</span></div>
+    <div class="cards">
+
+      <div class="card critico">
+        <div class="card-header">
+          <div class="card-icon">🚨</div>
+          <div>
+            <div class="tag tag-critico">Crítico</div>
+            <h4>Instagram como landing page = conversiones perdidas</h4>
+          </div>
+        </div>
+        <p>Mandar tráfico de pago a un perfil de Instagram es el error más caro que puedes cometer. No hay Pixel de Meta, no puedes medir quién descargó la app, no puedes hacer retargeting, y el usuario llega a un scroll infinito en lugar de a una acción clara.</p>
+        <div class="fix">
+          <strong>✅ Corrección</strong>
+          Crea una landing page mínima en <strong>ezplayapp.com/descargar</strong> con: headline, beneficios, botones App Store + Google Play, y Pixel instalado. Manda el tráfico ahí.
+        </div>
+      </div>
+
+      <div class="card critico">
+        <div class="card-header">
+          <div class="card-icon">🔗</div>
+          <div>
+            <div class="tag tag-critico">Crítico</div>
+            <h4>El link en bio no lleva directo a la descarga</h4>
+          </div>
+        </div>
+        <p>Aunque la bio de Instagram tiene links (linkinbio o similar), el usuario que llega de un anuncio tiene que encontrar solo el botón de descarga. Cada paso extra entre el clic y la descarga reduce la conversión un 20-30%.</p>
+        <div class="fix">
+          <strong>✅ Corrección</strong>
+          El único link en bio debe ser el de descarga de la app (o una página con los dos botones, iOS y Android). Nada más. Sin Linktree, sin distracciones.
+        </div>
+      </div>
+
+      <div class="card mejora">
+        <div class="card-header">
+          <div class="card-icon">📋</div>
+          <div>
+            <div class="tag tag-mejora">Mejora</div>
+            <h4>Bio de Instagram no tiene propuesta de valor clara</h4>
+          </div>
+        </div>
+        <p>La bio debe funcionar como el headline de un landing page: en 2 líneas, el usuario debe saber exactamente qué es EZ Play y por qué le conviene. Sin eso, el tráfico de pago rebota.</p>
+        <div class="fix">
+          <strong>✅ Corrección — Bio sugerida:</strong><br/><br/>
+          ⚽ Únete a partidos organizados en Panamá<br/>
+          📲 Reserva desde la app, llega y juega<br/>
+          👇 Descarga gratis aquí
+        </div>
+      </div>
+
+      <div class="card mejora">
+        <div class="card-header">
+          <div class="card-icon">🎯</div>
+          <div>
+            <div class="tag tag-mejora">Mejora</div>
+            <h4>No hay un Highlight de "Cómo funciona"</h4>
+          </div>
+        </div>
+        <p>El usuario que llega por primera vez necesita entender el servicio en segundos. Si no hay un highlight fijado con el proceso (elige, reserva, juega), va a salir sin convertir.</p>
+        <div class="fix">
+          <strong>✅ Corrección</strong>
+          Crea un Highlight "¿Cómo funciona?" con 4-5 stories que expliquen: qué es EZ Play, cómo reservar, qué incluye, y un CTA final para descargar.
+        </div>
+      </div>
+
+      <div class="card ok">
+        <div class="card-header">
+          <div class="card-icon">✅</div>
+          <div>
+            <div class="tag tag-ok">Funciona bien</div>
+            <h4>Propuesta de valor es clara en el sitio web</h4>
+          </div>
+        </div>
+        <p>"Organizamos los partidos, tú solo llegas y juegas" — es un headline sólido. Diferenciador claro, beneficio inmediato. El problema es que esto está en la web, no en los anuncios ni en el perfil de Instagram.</p>
+        <div class="fix">
+          <strong>✅ Acción</strong>
+          Llevar este headline al copy de los anuncios y a la bio de Instagram.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== SECCIÓN 2: ANUNCIOS ===================== -->
+  <div class="section">
+    <div class="section-title">2. Anuncios de Meta Ads <span>— Copy, hooks y estructura</span></div>
+    <div class="cards">
+
+      <div class="card critico">
+        <div class="card-header">
+          <div class="card-icon">🎣</div>
+          <div>
+            <div class="tag tag-critico">Crítico</div>
+            <h4>Los hooks no conectan con el dolor del usuario</h4>
+          </div>
+        </div>
+        <p>Los reels publicados usan hooks como "sonando en todas partes" o "este trabajador nos está delatando" — entretenidos, pero no hablan del problema real del usuario: <em>encontrar con quién jugar fútbol sin tener que organizar nada</em>.</p>
+        <div class="fix">
+          <strong>✅ Hooks que sí convierten:</strong><br/><br/>
+          "¿Quieres jugar fútbol pero nunca tienes equipo completo?"<br/>
+          "El fútbol en Panamá cambió: ya no necesitas organizar nada"<br/>
+          "Llegamos a la cancha, todo listo. ¿Cuándo fue la última vez?"
+        </div>
+      </div>
+
+      <div class="card critico">
+        <div class="card-header">
+          <div class="card-icon">📢</div>
+          <div>
+            <div class="tag tag-critico">Crítico</div>
+            <h4>No hay CTA claro hacia la descarga de la app</h4>
+          </div>
+        </div>
+        <p>Si el objetivo del anuncio es que la gente descargue la app, cada anuncio debe terminar con una instrucción explícita: "Descarga EZ Play", "Reserva tu cupo hoy", "Link en bio". Sin CTA, el usuario interesado no sabe qué hacer.</p>
+        <div class="fix">
+          <strong>✅ Corrección</strong>
+          El último segundo de cada reel/video debe mostrar la pantalla de la app con el texto: "Descarga gratis — Link en bio". Y el copy del anuncio termina con: "👇 Descarga EZ Play ahora — link en bio".
+        </div>
+      </div>
+
+      <div class="card mejora">
+        <div class="card-header">
+          <div class="card-icon">✍️</div>
+          <div>
+            <div class="tag tag-mejora">Mejora</div>
+            <h4>El copy habla de características, no de beneficios</h4>
+          </div>
+        </div>
+        <p>Frases como "partidos organizados", "coordinador presente", "petos y balones incluidos" describen qué es el servicio. Pero el usuario compra la promesa de resultado: jugar sin estrés, sentirse parte de algo, no perder el tiempo organizando.</p>
+        <div class="fix">
+          <strong>✅ Transformación copy:</strong><br/><br/>
+          <span style="color:#b91c1c">❌ "Tenemos coordinador en cancha y todo el equipo"</span><br/>
+          <span style="color:#166534">✅ "Llegas, juegas. Nosotros nos encargamos de todo lo demás"</span>
+        </div>
+      </div>
+
+      <div class="card mejora">
+        <div class="card-header">
+          <div class="card-icon">🎬</div>
+          <div>
+            <div class="tag tag-mejora">Mejora</div>
+            <h4>No hay variación de formatos en los anuncios</h4>
+          </div>
+        </div>
+        <p>La Biblioteca de Meta muestra principalmente reels. Faltan: anuncios de imagen estática (para retargeting barato), carruseles explicando el proceso, y Stories con CTA directo al botón de descarga.</p>
+        <div class="fix">
+          <strong>✅ Mix de formatos recomendado:</strong><br/>
+          • Reel (hook + beneficio + CTA) → tráfico frío<br/>
+          • Imagen estática (testimonio) → retargeting<br/>
+          • Story (proceso en 3 pasos) → consideration
+        </div>
+      </div>
+
+      <div class="card ok">
+        <div class="card-header">
+          <div class="card-icon">✅</div>
+          <div>
+            <div class="tag tag-ok">Funciona bien</div>
+            <h4>El tono es cercano y auténtico</h4>
+          </div>
+        </div>
+        <p>El tono informal, el humor y los captions en español panameño conectan bien con la audiencia local. "Este trabajador nos está delatando" genera engagement y humaniza la marca. Mantener ese tono.</p>
+        <div class="fix">
+          <strong>✅ Acción</strong>
+          Conservar el tono cercano pero añadir el CTA al final de cada pieza. El tono es el activo, no el problema.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== SECCIÓN 3: COHERENCIA AD ↔ LANDING ===================== -->
+  <div class="section">
+    <div class="section-title">3. Coherencia Anuncio ↔ Landing Page <span>— Message Match</span></div>
+    <table class="tabla-compare">
+      <thead>
+        <tr>
+          <th>Elemento</th>
+          <th>En el Anuncio</th>
+          <th>En el "Landing" (IG)</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Promesa principal</strong></td>
+          <td>"EZ Play sonando en todas partes"</td>
+          <td>Bio no explica el servicio directamente</td>
+          <td><span class="badge-mal">Roto</span></td>
+        </tr>
+        <tr>
+          <td><strong>Tono visual</strong></td>
+          <td>Dinámico, fútbol en cancha, acción</td>
+          <td>Mix de contenido variado (no siempre fútbol)</td>
+          <td><span class="badge-medio">Parcial</span></td>
+        </tr>
+        <tr>
+          <td><strong>CTA del anuncio → acción en landing</strong></td>
+          <td>Sin CTA explícito hacia descarga</td>
+          <td>Link en bio (pero no prominent)</td>
+          <td><span class="badge-mal">Roto</span></td>
+        </tr>
+        <tr>
+          <td><strong>Oferta / propuesta de valor</strong></td>
+          <td>No se menciona claramente en los reels</td>
+          <td>"EZ PLAY - Organizamos los partidos, tú solo juegas" (solo en web)</td>
+          <td><span class="badge-mal">Roto</span></td>
+        </tr>
+        <tr>
+          <td><strong>Prueba social (testimonios/números)</strong></td>
+          <td>No visible en anuncios</td>
+          <td>No visible en bio/perfil</td>
+          <td><span class="badge-mal">Ausente</span></td>
+        </tr>
+        <tr>
+          <td><strong>Contenido auténtico / UGC</strong></td>
+          <td>Reels con gente jugando, real</td>
+          <td>Presente en el feed</td>
+          <td><span class="badge-ok">OK</span></td>
+        </tr>
+        <tr>
+          <td><strong>Urgencia / escasez</strong></td>
+          <td>No presente</td>
+          <td>No presente</td>
+          <td><span class="badge-medio">Falta</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:16px; background:#fef2f2; border:1px solid #fecaca; border-radius:8px; padding:16px; font-size:14px; color:#991b1b;">
+      <strong>⚠️ Diagnóstico:</strong> El message match entre anuncio y landing page es casi inexistente. Un usuario que ve el anuncio, hace clic, llega al perfil de Instagram y no encuentra ni la promesa que lo trajo ni una razón clara para descargar la app. Esto explica CPAs altos y bajas tasas de conversión.
+    </div>
+  </div>
+
+  <!-- ===================== SECCIÓN 4: TRACKING ===================== -->
+  <div class="section">
+    <div class="section-title">4. Tracking y Pixel <span>— Sin datos, sin optimización</span></div>
+    <div class="tracking-grid">
+      <div class="tracking-item">
+        <div class="icon">📊</div>
+        <div class="name">Facebook Pixel</div>
+        <div class="status status-no">No instalado</div>
+        <p style="font-size:12px;color:var(--texto-suave);margin-top:8px;">Instagram como landing = imposible instalar Pixel</p>
+      </div>
+      <div class="tracking-item">
+        <div class="icon">📱</div>
+        <div class="name">App Events (SDK)</div>
+        <div class="status status-parcial">Sin confirmar</div>
+        <p style="font-size:12px;color:var(--texto-suave);margin-top:8px;">¿Está el Meta SDK integrado en la app para medir descargas?</p>
+      </div>
+      <div class="tracking-item">
+        <div class="icon">🎯</div>
+        <div class="name">Conversión Descarga App</div>
+        <div class="status status-no">No trackeada</div>
+        <p style="font-size:12px;color:var(--texto-suave);margin-top:8px;">No hay evento de conversión configurado en el Ads Manager</p>
+      </div>
+      <div class="tracking-item">
+        <div class="icon">🔄</div>
+        <div class="name">Retargeting</div>
+        <div class="status status-no">Imposible</div>
+        <p style="font-size:12px;color:var(--texto-suave);margin-top:8px;">Sin Pixel ni App Events no se puede hacer retargeting</p>
+      </div>
+      <div class="tracking-item">
+        <div class="icon">📈</div>
+        <div class="name">UTM Parameters</div>
+        <div class="status status-no">No hay</div>
+        <p style="font-size:12px;color:var(--texto-suave);margin-top:8px;">No se puede atribuir de dónde vienen las descargas</p>
+      </div>
+      <div class="tracking-item">
+        <div class="icon">🔗</div>
+        <div class="name">Enlace de Seguimiento</div>
+        <div class="status status-no">No detectado</div>
+        <p style="font-size:12px;color:var(--texto-suave);margin-top:8px;">Ni Branch.io, ni AppsFlyer, ni Firebase para trackear descargas de app</p>
+      </div>
+    </div>
+    <div style="margin-top:20px; background:#fff7ed; border:1px solid #fed7aa; border-radius:8px; padding:16px; font-size:14px; color:#9a3412;">
+      <strong>⚠️ Impacto del tracking roto:</strong> Sin datos, Meta Ads optimiza a ciegas. No sabe qué anuncios generan descargas reales → no puede optimizar → tus costos suben y el algoritmo no aprende. Instalar el SDK de Meta en la app y crear una landing con Pixel es la acción #1 con mayor ROI.
+    </div>
+  </div>
+
+  <!-- ===================== SECCIÓN 5: COPY ===================== -->
+  <div class="section">
+    <div class="section-title">5. Análisis de Copy <span>— Antes y después</span></div>
+
+    <div class="copy-box">
+      <div class="label">Bio de Instagram — Reescritura</div>
+      <div class="copy-antes">❌ <strong>Actual (estimado):</strong> Bio genérica o sin propuesta de valor directa para usuario nuevo que llega de un anuncio</div>
+      <div class="arrow">↓</div>
+      <div class="copy-despues">
+        ✅ <strong>Sugerida:</strong><br/>
+        ⚽ Partidos organizados de fútbol y volley en Panamá<br/>
+        📲 Reserva, paga desde la app y llega a jugar<br/>
+        ✅ Petos · Balones · Coordinador incluido<br/>
+        👇 Descarga gratis ↓
+      </div>
+    </div>
+
+    <div class="copy-box">
+      <div class="label">Hook de Video — Reescritura</div>
+      <div class="copy-antes">❌ <strong>Actual:</strong> "EZ Play sonando en todas partes 🗣️💥" — Entretenido pero no engancha a quien quiere jugar fútbol</div>
+      <div class="arrow">↓</div>
+      <div class="copy-despues">
+        ✅ <strong>Opción A:</strong> "¿Quieres jugar fútbol este finde pero no tienes equipo? Te tenemos."<br/><br/>
+        ✅ <strong>Opción B:</strong> "El problema con el fútbol amateur en Panamá: siempre hay que organizarlo todo. Nosotros lo hacemos por ti."<br/><br/>
+        ✅ <strong>Opción C:</strong> "Un partido de fútbol organizado en 3 pasos — mira cómo funciona 👇"
+      </div>
+    </div>
+
+    <div class="copy-box">
+      <div class="label">Caption del Anuncio — Estructura recomendada</div>
+      <div class="copy-antes">❌ <strong>Actual:</strong> Caption que describe el video sin CTA ni propuesta de valor explícita</div>
+      <div class="arrow">↓</div>
+      <div class="copy-despues">
+        ✅ <strong>Estructura que convierte:</strong><br/><br/>
+        <strong>[HOOK]</strong> ¿Siempre terminás organizando el partido y terminás más cansado que jugando?<br/><br/>
+        <strong>[AGITACIÓN]</strong> Buscar cancha, confirmar jugadores, traer balón, llevar petos... todo eso es un trabajo.<br/><br/>
+        <strong>[SOLUCIÓN]</strong> EZ Play lo hace por vos. Abrís la app, reservás tu cupo, llegás y jugás. Todo listo.<br/><br/>
+        <strong>[CTA]</strong> 👇 Descargá EZ Play gratis — link en bio
+      </div>
+    </div>
+
+    <div class="copy-box">
+      <div class="label">CTA de Stories — Formato recomendado</div>
+      <div class="copy-antes">❌ Sin stories como anuncio con CTA directo de descarga</div>
+      <div class="arrow">↓</div>
+      <div class="copy-despues">
+        ✅ Story 1: "¿Sabías que podés jugar fútbol en Panamá sin organizar nada?"<br/>
+        ✅ Story 2: "EZ Play lo organiza todo → vos solo llegás y jugás ⚽"<br/>
+        ✅ Story 3: Pantalla de la app con "Descarga gratis" + botón desliza arriba hacia App Store/Play Store
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== SECCIÓN 6: PLAN DE ACCIÓN ===================== -->
+  <div class="section">
+    <div class="section-title">6. Plan de Acción — 5 pasos por orden de impacto</div>
+    <div class="acciones">
+
+      <div class="accion">
+        <div class="accion-num"></div>
+        <div class="accion-body">
+          <h4>Crear landing page de descarga con Pixel instalado</h4>
+          <p>En <strong>ezplayapp.com/descargar</strong>: headline "Organizamos los partidos, tú solo llegas y juegas", 3 beneficios, 2 botones (App Store + Google Play) y el Pixel de Meta instalado. Sin esto, todo lo demás es optimizar sin datos.</p>
+          <div class="impacto">
+            <span class="imp-alto">Impacto: MUY ALTO</span>
+            <span class="imp-bajo">Tiempo: 1-2 días</span>
+          </div>
+          <div class="accion-cta">Semana 1 — Prioridad #1</div>
+        </div>
+      </div>
+
+      <div class="accion">
+        <div class="accion-num"></div>
+        <div class="accion-body">
+          <h4>Instalar Meta SDK en la app + configurar evento "App Install"</h4>
+          <p>El SDK de Meta en la app permite que cuando alguien descarga e instala EZ Play, ese evento se reporte al Ads Manager. Así Meta sabe qué anuncios generan instalaciones reales y optimiza automáticamente hacia eso (reduciendo tu CPI).</p>
+          <div class="impacto">
+            <span class="imp-alto">Impacto: MUY ALTO</span>
+            <span class="imp-bajo">Tiempo: 1-3 días (dev)</span>
+          </div>
+          <div class="accion-cta">Semana 1 — Prioridad #2</div>
+        </div>
+      </div>
+
+      <div class="accion">
+        <div class="accion-num"></div>
+        <div class="accion-body">
+          <h4>Reescribir la bio de Instagram y cambiar el link</h4>
+          <p>Bio nueva con propuesta de valor en 3 líneas + emoji. Link único apuntando a la landing de descarga (o directamente al App Store con seguimiento UTM). Esto se hace en 10 minutos y mejora la conversión de todos los usuarios que ya llegan al perfil.</p>
+          <div class="impacto">
+            <span class="imp-medio">Impacto: ALTO</span>
+            <span class="imp-bajo">Tiempo: 10 minutos</span>
+          </div>
+          <div class="accion-cta">Hoy mismo</div>
+        </div>
+      </div>
+
+      <div class="accion">
+        <div class="accion-num"></div>
+        <div class="accion-body">
+          <h4>Producir 3 nuevos reels con hook de problema + CTA de descarga</h4>
+          <p>Filmar 3 variaciones de reel con hook que habla del dolor del usuario (sin equipo, sin cancha, sin ganas de organizar) + mostrar la app + terminar con pantalla de descarga. Testear cuál tiene mejor CTR y escalar con presupuesto.</p>
+          <div class="impacto">
+            <span class="imp-medio">Impacto: ALTO</span>
+            <span class="imp-bajo">Tiempo: 1 semana</span>
+          </div>
+          <div class="accion-cta">Semana 2</div>
+        </div>
+      </div>
+
+      <div class="accion">
+        <div class="accion-num"></div>
+        <div class="accion-body">
+          <h4>Activar campaña de "App Install" en Meta Ads (objetivo correcto)</h4>
+          <p>Cambiar el objetivo de campaña de "Tráfico" o "Interacción" a <strong>App Installs</strong>. Meta optimiza el delivery hacia usuarios con más probabilidad de instalar apps. Requiere el SDK instalado (paso 2) para funcionar bien.</p>
+          <div class="impacto">
+            <span class="imp-alto">Impacto: MUY ALTO</span>
+            <span class="imp-bajo">Tiempo: 1 hora</span>
+          </div>
+          <div class="accion-cta">Semana 2 (después del SDK)</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===================== SECCIÓN 7: AUDIENCIA ===================== -->
+  <div class="section">
+    <div class="section-title">7. Audiencia Objetivo <span>— Segmentación recomendada</span></div>
+    <div class="cards">
+      <div class="card mejora">
+        <div class="card-header">
+          <div class="card-icon">👨‍⚽</div>
+          <div>
+            <div class="tag tag-mejora">Segmentación principal</div>
+            <h4>Audiencia Core — Jugadores recreativos</h4>
+          </div>
+        </div>
+        <p><strong>Panamá</strong> · 18-40 años · Hombres principalmente · Intereses: Fútbol, Deportes en equipo, Fútbol 5, Actividades al aire libre, Nike, Adidas, FIFA.</p>
+        <div class="fix"><strong>✅ Radio de campaña:</strong> Ciudad de Panamá + áreas donde operan las canchas de EZ Play. Evitar todo el país si solo operan en algunas zonas.</div>
+      </div>
+      <div class="card mejora">
+        <div class="card-header">
+          <div class="card-icon">🎯</div>
+          <div>
+            <div class="tag tag-mejora">Segmentación secundaria</div>
+            <h4>Lookalike de usuarios de la app</h4>
+          </div>
+        </div>
+        <p>Una vez instales el SDK (acción #2), puedes subir la lista de usuarios que ya reservaron partidos y crear un <strong>Lookalike 1%</strong> — Meta busca gente similar a tus mejores clientes en Panamá.</p>
+        <div class="fix"><strong>✅ Activar después del SDK:</strong> Custom Audience "Usuarios activos" → Lookalike 1% → campaña App Installs</div>
+      </div>
+      <div class="card ok">
+        <div class="card-header">
+          <div class="card-icon">✅</div>
+          <div>
+            <div class="tag tag-ok">Funciona bien</div>
+            <h4>El enfoque local (Panamá) es correcto</h4>
+          </div>
+        </div>
+        <p>Mantener la segmentación geográfica específica a donde operan las canchas. No expandir a toda LATAM sin tener presencia física.</p>
+        <div class="fix"><strong>✅ Acción:</strong> Verificar que TODAS las campañas estén segmentadas por ciudad/zona, no por país completo.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <p>Auditoría generada el <strong>22 de abril de 2026</strong> · Cliente: <strong>EZ Play (@ezplaylatam)</strong> · Panamá</p>
+  <p style="margin-top:8px;">Este análisis se basa en información pública disponible de la cuenta de Instagram, sitio web ezplayapp.com y la Biblioteca de Anuncios de Meta.</p>
+</div>
+
+</body>
+</html>
